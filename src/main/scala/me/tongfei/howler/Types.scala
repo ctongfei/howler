@@ -11,3 +11,6 @@ case class Student(studentId: String, first: String, last: String, email: String
 case class ProblemGrading(problemId: String, ruleIds: Seq[String])
 
 case class AssignmentGrading(studentId: String, problemGradings: Map[String, ProblemGrading])
+
+case class Email(recipient: String, subject: String, content: String)
+

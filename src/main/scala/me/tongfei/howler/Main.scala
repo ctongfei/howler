@@ -20,6 +20,7 @@ object Main extends App {
   options.addOption("port", true, "SMTP port")
   options.addOption("sender", true, "Sender email address")
   options.addOption("password", true, "Password")
+  options.addOption("ta", true, "Name of TA")
   val cmd = (new DefaultParser).parse(options, args)
 
   val students = XmlReader.readStudents(cmd.getOptionValue("students"))
@@ -40,11 +41,12 @@ object Main extends App {
       if (cmd.hasOption("E")) {
         val sender = cmd.getOptionValue("sender").split("@")
         val recipientSplit = students(s).email.split("@")
+        val ta = cmd.getOptionValue("ta")
 
         val mail = Envelope
           .from(sender(0) at sender(1))
           .to(recipientSplit(0) at recipientSplit(1))
-          .subject(s"Grades for ${rubric.course}: ${rubric.assignmentId}")
+          .subject(s"Grades for ${rubric.course}: Assignment ${rubric.assignmentId}")
           .content(Text(
             s"""
               |Dear ${students(s).first},
@@ -53,7 +55,7 @@ object Main extends App {
               |${ex.lines.mkString("\n")}
               |
               |Best automatic regards,
-              |Howler
+              |$ta
             """.stripMargin))
 
         val mailer = Mailer(cmd.getOptionValue("smtp"), cmd.getOptionValue("port").toInt)
@@ -72,5 +74,5 @@ object Main extends App {
   println(s"maxScore = ${session.maxScore}")
   println(s"mean     = ${session.mean}")
   println(s"stdDev   = ${session.stdDev}")
-  val bp = 0
+
 }
