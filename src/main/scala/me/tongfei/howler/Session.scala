@@ -3,26 +3,27 @@ package me.tongfei.howler
 /**
  * @author Tongfei Chen
  */
-class Session(val students: Map[String, Student], val rubric: Rubric, val gradings: Map[String, AssignmentGrading]) {
+class Session(val students: Map[String, Student], val rubric: Rubrics, val gradings: Map[String, AssignmentGrading]) {
 
   def gradeProblem(studentId: String, problemId: String) = {
     val problem = rubric.problems(problemId)
     val problemGrading = gradings(studentId).problemGradings.get(problemId)
     val score = problemGrading match {
       case Some(_) => rubric.problems(problemId).score
-      case None => 0
+      case None => 0 // student has not completed this problem
       }
+
     val ruleExplanations = for {
       pg <- problemGrading.toList
       ruleId <- pg.ruleIds
       r = problem.rules.get(ruleId) getOrElse rubric.globalRules(ruleId)
-    }
-      yield if (r.score > 0) RuleExplanation(s"BONUS: ${r.description}", r.score)
+    } yield if (r.score > 0) RuleExplanation(s"BONUS: ${r.description}", r.score)
       else RuleExplanation(s"Penalty: ${r.description}", r.score)
+
     ProblemExplanation(
       s = s"Problem ${problem.problemId} (${problem.description})",
       children = ruleExplanations,
-      score = score + ruleExplanations.map(_.score).sum,
+      score = score + ruleExplanations.map(_.score).sum max 0,
       fullScore = problem.score
     )
   }
@@ -32,7 +33,7 @@ class Session(val students: Map[String, Student], val rubric: Rubric, val gradin
     AssignmentExplanation(
       s = s"Assignment ${rubric.assignmentId} (${rubric.description})",
       children = problemExplanations,
-      score = problemExplanations.map(_.score).sum,
+      score = problemExplanations.map(_.score).sum max 0,
       fullScore = rubric.problems.values.map(_.score).sum)
   }
 

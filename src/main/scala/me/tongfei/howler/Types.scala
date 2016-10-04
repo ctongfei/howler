@@ -2,7 +2,7 @@ package me.tongfei.howler
 
 case class Rule(ruleId: String, score: Double, description: String)
 
-case class Rubric(course: String, assignmentId: String, problems: Map[String, Problem], globalRules: Map[String, Rule], description: String)
+case class Rubrics(course: String, assignmentId: String, problems: Map[String, Problem], globalRules: Map[String, Rule], description: String)
 
 case class Problem(problemId: String, score: Double, rules: Map[String, Rule], description: String)
 

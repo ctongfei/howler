@@ -1,7 +1,6 @@
 package me.tongfei.howler
 
 import java.nio.file._
-
 import scala.xml._
 
 /**
@@ -16,9 +15,9 @@ object XmlReader {
     }.toMap
   }
 
-  def readRubric(fn: String) = {
+  def readRubrics(fn: String) = {
     val xml = XML.load(Files.newBufferedReader(Paths.get(fn)))
-    Rubric(
+    Rubrics(
       course = xml \@ "course",
       assignmentId = xml \@ "id",
       problems = (xml \ "problem").map { p =>
@@ -60,14 +59,5 @@ object XmlReader {
       )
     }.toMap
   }
-
-}
-
-object Test extends App {
-
-  val m = XmlReader.readStudents("/Users/tongfei/my/ta/kdft/students.xml")
-  val r = XmlReader.readRubric("/Users/tongfei/my/ta/kdft/hw1-rubric.xml")
-  val g = XmlReader.readGrading("/Users/tongfei/my/ta/kdft/hw1-grading.xml")
-  val bp = 0
 
 }
