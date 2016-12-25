@@ -37,7 +37,7 @@ class Session(val students: Map[String, Student], val rubric: Rubrics, val gradi
       fullScore = rubric.problems.values.map(_.score).sum)
   }
 
-  val reports = students.keys.map(s => s -> gradeAssignment(s))
+  val reports = students.keys.toSeq.map(s => s -> gradeAssignment(s))
 
   val scores = reports.map(_._2.score)
 
@@ -48,6 +48,5 @@ class Session(val students: Map[String, Student], val rubric: Rubrics, val gradi
   val mean = scores.sum / scores.size
 
   val stdDev = math.sqrt(scores.map(x => x * x).sum / scores.size - mean * mean)
-
 
 }

@@ -55,7 +55,7 @@ object Main extends App {
         .content(Text(
           s"""
               |Dear ${students(s).first},
-              |  Your grades for assignment ${rubrics.assignmentId} is attached below.
+              |  Your grades for assignment ${rubrics.assignmentId} is listed below.
               |
               |${ex.lines.mkString("\n")}
               |
@@ -91,5 +91,6 @@ object Main extends App {
   println(s"maxScore = ${session.maxScore}")
   println(s"mean     = ${session.mean}")
   println(s"stdDev   = ${session.stdDev}")
+
 
 }
